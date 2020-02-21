@@ -16,6 +16,8 @@ using ParkyApi.Repository.IRepository;
 using AutoMapper;
 using ParkyApi.ParkyMapper;
 using ParkyApi.Repository.Implementations;
+using System.Reflection;
+using System.IO;
 
 namespace ParkyApi
 {
@@ -36,6 +38,29 @@ namespace ParkyApi
             services.AddControllers();
             services.AddAutoMapper(typeof(ParkyMappings));
             services.AddScoped<INationalParkRepository, NationalParkRepository>();
+            services.AddSwaggerGen(options => {
+                options.SwaggerDoc("ParkyOpenApiSpec",
+                    new Microsoft.OpenApi.Models.OpenApiInfo()
+                    {
+                        Title = "Parky API",
+                        Version = "1",
+                        Description = "Tony's firt API project",
+                        Contact = new Microsoft.OpenApi.Models.OpenApiContact()
+                        {
+                            Email = "odigietony.jr@gmail.com",
+                            Name = "Odigie Anthony Jr."
+                        },
+                        License = new Microsoft.OpenApi.Models.OpenApiLicense()
+                        {
+                            Name ="MIT License",
+                            Url = new Uri("https://en.wikipedia.org/wiki/MIT_License")
+                        }
+                    });
+                // To include the xml comments in the controllers to the api doc.
+                var xmlCommentFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml"; // Rather than use the absolute path to the xml, we dynamically get the path.
+                var cmlCommentFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentFile);
+                options.IncludeXmlComments(cmlCommentFullPath);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,7 +72,12 @@ namespace ParkyApi
             }
 
             app.UseHttpsRedirection();
-
+            app.UseSwagger();
+            //For api documentation point swagger ui to the swagger default url
+            app.UseSwaggerUI(options => {
+                options.SwaggerEndpoint("/swagger/ParkyOpenApiSpec/swagger.json", "Parky API");
+                options.RoutePrefix = ""; // this is to ensure that the API doc is loaded as the default lauching page (remove the default lauchingurl from lauchsettings.json)
+            });
             app.UseRouting();
 
             app.UseAuthorization();
