@@ -13,6 +13,7 @@ namespace ParkyApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiExplorerSettings(GroupName = "ParkyOpenApiSpecTrails")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public class TrailsController : Controller
     {
@@ -70,7 +71,7 @@ namespace ParkyApi.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult CreateTrail([FromBody] TrailDto trailDto)
+        public IActionResult CreateTrail([FromBody] TrailCreateDto trailDto)
         {
             if (trailDto == null)
             {
@@ -85,12 +86,13 @@ namespace ParkyApi.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if (!_trailRepository.CreateTrail(_mapper.Map<Trail>(trailDto)))
+            var trailObj = _mapper.Map<Trail>(trailDto);
+            if (!_trailRepository.CreateTrail(trailObj))
             {
-                ModelState.AddModelError(String.Empty, $"Something went wrong while trying to save {trailDto.Name}");
+                ModelState.AddModelError("", $"Something went wrong when saving the record {trailObj.Name}");
                 return StatusCode(500, ModelState);
             }
-            return CreatedAtRoute("GetTrail", new { trailId = trailDto.Id }, trailDto);
+            return CreatedAtRoute("GetTrail", new { trailId = trailObj.Id }, trailObj);
         }
 
 
@@ -103,7 +105,7 @@ namespace ParkyApi.Controllers
         [HttpPatch("{trailId:int}", Name = "UpdateTrail")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public IActionResult UpdateTrail(int trailId, [FromBody] TrailDto trailDto)
+        public IActionResult UpdateTrail(int trailId, [FromBody] TrailUpdateDto trailDto)
         {
             if(trailDto == null || trailId != trailDto.Id)
             {

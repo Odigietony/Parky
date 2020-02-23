@@ -13,6 +13,7 @@ namespace ParkyApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiExplorerSettings(GroupName = "ParkyOpenApiSpecNP")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public class NationalParkController : Controller
     {
