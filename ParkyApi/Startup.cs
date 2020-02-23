@@ -38,6 +38,7 @@ namespace ParkyApi
             services.AddControllers();
             services.AddAutoMapper(typeof(ParkyMappings));
             services.AddScoped<INationalParkRepository, NationalParkRepository>();
+            services.AddScoped<ITrailRepository, TrailRepository>();
             services.AddSwaggerGen(options => {
                 options.SwaggerDoc("ParkyOpenApiSpec",
                     new Microsoft.OpenApi.Models.OpenApiInfo()
