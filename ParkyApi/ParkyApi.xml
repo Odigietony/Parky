@@ -39,6 +39,12 @@
             <param name="nationalParkId"> The Id of the record to be deleted</param>
             <returns></returns>
         </member>
+        <member name="M:ParkyApi.Controllers.NationalParkV2Controller.GetNationalParks">
+            <summary>
+            /Get all National parks
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:ParkyApi.Controllers.TrailsController.GetTrails">
             <summary>
             /Get all Trails
@@ -50,6 +56,13 @@
             Get an individual trails
             </summary>
             <param name="trailId"> The Id of the Trail </param>
+            <returns></returns>
+        </member>
+        <member name="M:ParkyApi.Controllers.TrailsController.GetTrailInNationalPark(System.Int32)">
+            <summary>
+            Get trail in national park
+            </summary>
+            <param name="nationalParkId"></param> 
             <returns></returns>
         </member>
         <member name="M:ParkyApi.Controllers.TrailsController.CreateTrail(ParkyApi.Models.DTOs.TrailCreateDto)">

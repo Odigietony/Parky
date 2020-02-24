@@ -11,9 +11,10 @@ using ParkyApi.Repository.IRepository;
 
 namespace ParkyApi.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/trails")]
     [ApiController]
-    [ApiExplorerSettings(GroupName = "ParkyOpenApiSpecTrails")]
+    //[ApiExplorerSettings(GroupName = "ParkyOpenApiSpecTrails")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public class TrailsController : Controller
     {
@@ -58,6 +59,31 @@ namespace ParkyApi.Controllers
                 return NotFound();
             }
             var trailObjDto = _mapper.Map<TrailDto>(trailobj);
+            return Ok(trailObjDto);
+        }
+
+
+        /// <summary>
+        /// Get trail in national park
+        /// </summary>
+        /// <param name="nationalParkId"></param> 
+        /// <returns></returns>
+        [HttpGet("[action]/{nationalParkId:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult GetTrailInNationalPark(int nationalParkId)
+        {
+            var trailListObj = _trailRepository.GetTrailsInNationalPark(nationalParkId);
+            if (trailListObj == null)
+            {
+                return NotFound();
+            }
+            var trailObjDto = new List<TrailDto>();
+            foreach (var trailobj in trailListObj)
+            {
+                 trailObjDto.Add(_mapper.Map<TrailDto>(trailobj));
+            }
+            
             return Ok(trailObjDto);
         }
 
