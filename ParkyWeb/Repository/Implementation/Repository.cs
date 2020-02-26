@@ -59,7 +59,7 @@ namespace ParkyWeb.Repository.Implementation
             }
         }
 
-        public async Task<IEnumerable<T>> GatAllAsync(string url)
+        public async Task<IEnumerable<T>> GetAllAsync(string url)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, url);
             HttpResponseMessage response = await _clientFactory.CreateClient().SendAsync(request);

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using ParkyWeb.ApiEndpoints;
+using ParkyWeb.Models;
 using ParkyWeb.Repository.IRepository;
 
 namespace ParkyWeb.Controllers
@@ -17,7 +19,12 @@ namespace ParkyWeb.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            return View(new NationalPark { });
+        }
+
+        public async Task<IActionResult> GetAllNationalParks()
+        {
+            return Json(new { data = await _nationalPark.GetAllAsync(StaticDetails.NationalParkApiUrl)});
         }
     }
 }
