@@ -98,7 +98,7 @@ namespace ParkyWeb.Controllers
             {
                 return Json(new { success = true, Message = $"The {nationalParkObject.Name} was Deleted Successfully!" });
             }
-            return Json(new { success = true, Message = $"Delete was not Successful!" });
+            return Json(new { success = false, Message = $"Delete was not Successful!" });
         }
     }
 }
