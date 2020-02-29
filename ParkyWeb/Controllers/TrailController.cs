@@ -35,7 +35,8 @@ namespace ParkyWeb.Controllers
                 {
                     Text = i.Name,
                     Value = i.Id.ToString()
-                })
+                }),
+                Trail = new Trail()
             };
             if (Id == null)
             {
@@ -67,7 +68,17 @@ namespace ParkyWeb.Controllers
             }
             else
             {
-                return View(model);
+                var nationalParksList = await _nationalPark.GetAllAsync(StaticDetails.NationalParkApiUrl);
+                TrailViewModel trailViewModel = new TrailViewModel()
+                {
+                    NationalParks = nationalParksList.Select(i => new SelectListItem
+                    {
+                        Text = i.Name,
+                        Value = i.Id.ToString()
+                    }),
+                    Trail = model.Trail
+                };
+                return View(trailViewModel);
             }
         }
 
